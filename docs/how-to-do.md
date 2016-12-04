@@ -200,21 +200,37 @@ var promiseMethods = returnMethods.reduce(function (promise, method) {
 
 A função do `reduce` **SEMPRE** recebe 2 parâmetros que são:
 
-- posição **ANTERIOR** no *Array*
+- acumulador
 - posição **ATUAL** no *Array*
 
 Porém **SÓ PODE RETORNAR 1 VALOR** que será utilizado pela próxima iteração do `reduce`, por exemplo:
 
 ```js
-[1, 2, 3].reduce((anterior, atual) => { console.log('anterior, atual', anterior, atual); return anterior+atual })
+[1, 2, 3, 4, 5].reduce((anterior, atual) => { console.log('anterior, atual', anterior, atual); return anterior+atual })
 anterior, atual 1 2
 anterior, atual 3 3
-6
+anterior, atual 6 4
+anterior, atual 10 5
+15
 ```
 
 > Você achou estranho eu ter falado que o primeiro parâmetro é o anterior e o segundo é o atual, mas viu que o anterior era o primeiro elemento e o atual era o segundo elemento né?
 
-Bom isso acontece porque 1 *Array* não possui 1 elemento anterior ao primeiro, **NUNCA**, ou seja se você tem uma função que recebe 2 posições de 1 *Array* e só retorna 1 valor, você **SEMPRE iniciará da segunda posição** pois para que o `redcuce` aconteça você precisa de 2 posições, logo a primeira posição é **SEMPRE obrigatória** não necessitando que ela seja a atual, por isso o `reduce` coloca a posição atual como sendo a segunda, pois o retorno dele **SEMPRE** será algum processamento entre 2 posições do *Array*.
+Bom isso acontece porque 1 *Array* não possui 1 elemento anterior ao primeiro, **NUNCA**, ou seja se você tem uma função que recebe 2 posições de 1 *Array* e só retorna 1 valor, você **SEMPRE iniciará da segunda posição** pois para que o `redcuce` aconteça você precisa de 2 posições, logo a primeira posição é **SEMPRE obrigatória** não necessitando que ela seja a atual, por isso o `reduce` coloca a posição atual como sendo a segunda, pois o retorno dele **SEMPRE** será algum processamento entre 2 valores.
+
+E podemos inicializar essa primeira posição, o acumulador, passando um valor de inicialização para o reduce, assim:
+
+```js
+[1, 2, 3, 4, 5].reduce((acumulador, atual) => { console.log('acumulador, atual', acumulador, atual); return acumulador+atual }, 10)
+acumulador, atual 10 1
+acumulador, atual 11 2
+acumulador, atual 13 3
+acumulador, atual 16 4
+acumulador, atual 20 5
+25
+```
+
+Nesse caso estamos passando o `10` como acumulador, logo é sempre nessa variável que será "jogado" o valor processado pelo `reduce`, com isso conseguimos utilizar técnicas bem avançadas de composição de objetos.
 
 No nosso exemplo, `returnMethods.reduce(function (promise, method)`, o *Array* é `returnMethods` e cada posição é passada para os seguintes parâmetros:
 
